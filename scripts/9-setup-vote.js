@@ -1,35 +1,44 @@
 import sdk from "./1-initialize-sdk.js";
 
-// This is our governance contract.
-const vote = sdk.getVote("0x406943E3A5107342cC5deD69026503f9ba945787");
-
-// This is our ERC-20 contract.
-const token = sdk.getToken("0x29504A69a2A81F9030186de7F2F41Ef4cade1f4a");
-
 (async () => {
-    try {
-        // Give our treasury the power to mint additional token if needed.
-        await token.roles.grant("minter", vote.getAddress());
+  try {
+    // This is our governance contract.
+    const vote = await sdk.getContract("0xb7494F36Fd6ca3602e209D1f78AF00D91921FD16", "vote");
+    // This is our ERC-20 contract.
+    const token = await sdk.getContract("0x3fBA9255f02b61eeB908E36Fa65A0982Fe3c55D3", "token");
+    // Give our treasury the power to mint additional token if needed.
+    await token.roles.grant("minter", vote.getAddress());
 
-        console.log("Successfully gave vote contract permissions to act on token contract");
-    } catch (error) {
-        console.error("failed to grant vote contract permissions on token contract", error);
-        process.exit(1);
-    }
+    console.log(
+      "Successfully gave vote contract permissions to act on token contract"
+    );
+  } catch (error) {
+    console.error(
+      "failed to grant vote contract permissions on token contract",
+      error
+    );
+    process.exit(1);
+  }
 
-    try {
-        // Grab our wallet's token balance, remember -- we hold basically the entire supply right now!
-        const ownedTokenBalance = await token.balanceOf(process.env.WALLET_ADDRESS);
+  try {
+    // This is our governance contract.
+    const vote = await sdk.getContract("0xb7494F36Fd6ca3602e209D1f78AF00D91921FD16", "vote");
+    // This is our ERC-20 contract.
+    const token = await sdk.getContract("0x3fBA9255f02b61eeB908E36Fa65A0982Fe3c55D3", "token");
+    // Grab our wallet's token balance, remember -- we hold basically the entire supply right now!
+    const ownedTokenBalance = await token.balanceOf(process.env.WALLET_ADDRESS);
 
-        // Grab 90% of the supply that we hold.
-        const ownedAmount = ownedTokenBalance.displayValue;
-        const percent90 = (Number(ownedAmount) / 100) * 90;
+    // Grab 90% of the supply that we hold.
+    const ownedAmount = ownedTokenBalance.displayValue;
+    const percent90 = (Number(ownedAmount) / 100) * 90;
 
-        // Transfer 90% of the supply to our voting contract.
-        await token.transfer(vote.getAddress(), percent90);
+    // Transfer 90% of the supply to our voting contract.
+    await token.transfer(vote.getAddress(), percent90);
 
-        console.log("✅ Successfully transferred " + percent90 + " tokens to vote contract");
-    } catch (err) {
-        console.error("failed to transfer tokens to vote contract", err);
-    }
+    console.log(
+      "✅ Successfully transferred " + percent90 + " tokens to vote contract"
+    );
+  } catch (err) {
+    console.error("failed to transfer tokens to vote contract", err);
+  }
 })();

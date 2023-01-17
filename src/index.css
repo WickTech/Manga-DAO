@@ -8,6 +8,28 @@ body {
   color: #fff;
   overflow-x: hidden;
 }
+
+/*Background Gradient*/
+body {
+  background: linear-gradient(101deg, #7D0046, #AD0000, #000000);
+  background-size: 600% 600%;
+  animation: GradientBackground 20s ease infinite;
+}
+
+@keyframes GradientBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+};
+
 #root {
   min-height: 100vh;
   display: flex;
@@ -144,3 +166,49 @@ button:disabled {
   opacity: 0.8;
   pointer-events: none;
 }
+
+/* Manga Background */
+
+  .panelbox {
+    height: 100%;
+    width: auto;
+    background-color: rgb(179, 0, 0);
+    display: flex;
+    border: 10px solid;
+    color: rgb(0, 0, 0);
+  }
+  
+  .marquee {
+    height: auto;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .marquee-content {
+    list-style: none;
+    display: flex;
+    animation: scrolling 100s linear infinite;
+  }
+  
+  @keyframes scrolling {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-1*420px*12)); }
+  }
+  
+  .marquee-content li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  
+  .marquee-content img {
+    height:auto;
+    max-width: 420px;
+    padding: 5px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
